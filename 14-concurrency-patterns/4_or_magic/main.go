@@ -6,13 +6,9 @@ import (
 )
 
 func or(channels ...<-chan struct{}) <-chan struct{} {
-	switch len(channels) {
-	case 0:
+	if len(channels) == 0{
 		return nil
-	case 1:
-		return channels[0] // <-or(ch) == <-ch
-	}
-
+	} 
 	orDone := make(chan struct{})
 	go func() {
 		defer close(orDone)
@@ -35,10 +31,6 @@ func main() {
 	}
 
 	start := time.Now()
-	<-or(make(<-chan struct{}))
-	fmt.Printf("done after %v\n", time.Since(start))
-
-	start = time.Now()
 	<-or(
 		sig(1*time.Second),
 	)
