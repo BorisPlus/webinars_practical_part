@@ -6,8 +6,8 @@ import (
 )
 
 func main() {
-	doWork := func(done <-chan struct{}, strings <-chan string) <-chan struct{} {
-		terminated := make(chan struct{})
+	doWork := func(done <-chan struct{}, strings <-chan string) <-chan int {
+		terminated := make(chan int)
 		go func() {
 			defer func() {
 				fmt.Println("doWork exited.")
@@ -16,9 +16,9 @@ func main() {
 			for {
 				select {
 				case s := <-strings:
-					fmt.Println(s)
+					fmt.Println("Println", s)
 				case <-done:
-					return
+					return 
 				}
 			}
 		}()
@@ -35,5 +35,6 @@ func main() {
 	}()
 
 	<-terminated
+	fmt.Println(<-terminated)
 	fmt.Println("Done.")
 }

@@ -4,10 +4,11 @@ import "fmt"
 
 func main() {
 	chanOwner := func() <-chan int {
-		results := make(chan int, 5)
+		results := make(chan int)
 		go func() {
 			defer close(results)
 			for i := 0; i <= 5; i++ {
+				fmt.Println("Input", i)
 				results <- i
 			}
 		}()
@@ -22,5 +23,6 @@ func main() {
 	}
 
 	results := chanOwner()
+	// close(results)
 	consumer(results)
 }

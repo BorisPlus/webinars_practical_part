@@ -8,7 +8,7 @@ import (
 func main() {
 	doWork := func(strings <-chan string) <-chan struct{} {
 		completed := make(chan struct{})
-		go func() {
+		go func() { // It work dead
 			defer func() {
 				fmt.Println("doWork exited.")
 				close(completed)
