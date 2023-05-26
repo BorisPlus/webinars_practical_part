@@ -44,14 +44,14 @@ func TestOrFromTwo(t *testing.T) {
 
 	start := time.Now()
 	<-or(
-		sig(1*time.Second),
 		sig(10*time.Second),
+		sig(5*time.Second),
 	)
 	expired := time.Since(start)
 
-	expected, _ := time.ParseDuration("1.2s")
+	expected, _ := time.ParseDuration("5.2s")
 	if expired > expected {
-		t.Errorf("Must be ~1 sec., but %v", expired)
+		t.Errorf("Must be ~5 sec., but %v", expired)
 	} else {
 		fmt.Printf("Well done after %v\n", expired)
 	}
@@ -86,13 +86,13 @@ func TestOrFromThree(t *testing.T) {
 
 //
 // === RUN   TestOrFromOne
-// Well done after 1.000203168s
+// Well done after 1.000182006s
 // --- PASS: TestOrFromOne (1.00s)
 // === RUN   TestOrFromTwo
-// Well done after 1.000208127s
-// --- PASS: TestOrFromTwo (1.00s)
+// Well done after 5.018289058s
+// --- PASS: TestOrFromTwo (5.02s)
 // === RUN   TestOrFromThree
-// Well done after 1.000244864s
+// Well done after 1.000319733s
 // --- PASS: TestOrFromThree (1.00s)
 // PASS
-// ok      github.com/OtusGolang/webinars_practical_part/14-concurrency-patterns/4_or_magic_mine   3.228s
+// ok      github.com/OtusGolang/webinars_practical_part/14-concurrency-patterns/4_or_magic_mine   7.295s
