@@ -1,14 +1,12 @@
 package main
 
-import (
-	"fmt"
-	"time"
-)
+// https://github.com/OtusGolang/webinars_practical_part/blob/master/14-concurrency-patterns/4_or_magic/main.go
+// go test -v -count=1 -race -timeout=1m ./
 
 func or(channels ...<-chan struct{}) <-chan struct{} {
-	if len(channels) == 0{
+	if len(channels) == 0 {
 		return nil
-	} 
+	}
 	orDone := make(chan struct{})
 	go func() {
 		defer close(orDone)
@@ -18,46 +16,4 @@ func or(channels ...<-chan struct{}) <-chan struct{} {
 		}
 	}()
 	return orDone
-}
-
-func main() {
-	sig := func(after time.Duration) <-chan struct{} {
-		c := make(chan struct{})
-		go func() {
-			defer close(c)
-			<-time.After(after)
-		}()
-		return c
-	}
-
-	start := time.Now()
-	<-or(
-		sig(1*time.Second),
-	)
-	fmt.Printf("done after %v\n", time.Since(start))
-
-	start = time.Now()
-	<-or(
-		sig(5*time.Minute),
-		sig(1*time.Second),
-	)
-	fmt.Printf("done after %v\n", time.Since(start))
-
-	start = time.Now()
-	<-or(
-		sig(5*time.Minute),
-		sig(1*time.Second),
-		sig(10*time.Second),
-	)
-	fmt.Printf("done after %v\n", time.Since(start))
-
-	start = time.Now()
-	<-or(
-		sig(2*time.Hour),
-		sig(5*time.Minute),
-		sig(1*time.Second),
-		sig(1*time.Hour),
-		sig(10*time.Second),
-	)
-	fmt.Printf("done after %v\n", time.Since(start))
 }
