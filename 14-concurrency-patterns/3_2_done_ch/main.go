@@ -34,6 +34,7 @@ func main() {
 		close(done)
 	}()
 
+	fmt.Println("Wait terminate.")
 	<-terminated
 	fmt.Println("Done.")
 }
